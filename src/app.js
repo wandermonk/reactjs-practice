@@ -13,12 +13,18 @@ function showOptions(){
     }
 }
 
+const onMakeDecision = () => {
+    const randNumber =Math.floor(Math.random() * app.options.length);
+    const option = app.options[randNumber]
+    alert(option)
+};
+
 const onFormSubmit = (e) => {
     e.preventDefault();
     const option = e.target.elements.option.value;
     if (option){
         app.options.push(option);
-        e.target.elements.option.value = ' ';
+        e.target.elements.option.value = '';
         renderFormData();
     }
 };
@@ -46,7 +52,6 @@ const renderFormData = () => {
             <h1>{app.title}</h1>
             {app.subtitle && <p>{app.subtitle}</p>}
             {showOptions()}
-            <p>{app.options.length}</p>
             <ol>
             {
                 app.options.map((option) => {
@@ -57,6 +62,7 @@ const renderFormData = () => {
             <form onSubmit={onFormSubmit}>
                 <input type="text" name="option"/>
                 <button>Add option</button>
+                <button disabled={app.options.length === 0} onClick={onMakeDecision}>Make Decision</button>
                 <button onClick={removeOne}>Remove</button>
                 <button onClick={removeAll}>Remove All</button>
             </form>

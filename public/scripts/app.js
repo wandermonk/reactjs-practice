@@ -22,12 +22,18 @@ function showOptions() {
     }
 }
 
+var onMakeDecision = function onMakeDecision() {
+    var randNumber = Math.floor(Math.random() * app.options.length);
+    var option = app.options[randNumber];
+    alert(option);
+};
+
 var onFormSubmit = function onFormSubmit(e) {
     e.preventDefault();
     var option = e.target.elements.option.value;
     if (option) {
         app.options.push(option);
-        e.target.elements.option.value = ' ';
+        e.target.elements.option.value = '';
         renderFormData();
     }
 };
@@ -65,11 +71,6 @@ var renderFormData = function renderFormData() {
         ),
         showOptions(),
         React.createElement(
-            'p',
-            null,
-            app.options.length
-        ),
-        React.createElement(
             'ol',
             null,
             app.options.map(function (option) {
@@ -88,6 +89,11 @@ var renderFormData = function renderFormData() {
                 'button',
                 null,
                 'Add option'
+            ),
+            React.createElement(
+                'button',
+                { disabled: app.options.length === 0, onClick: onMakeDecision },
+                'Make Decision'
             ),
             React.createElement(
                 'button',
