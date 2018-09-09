@@ -3,7 +3,7 @@
 var app = {
     title: 'Indecision App',
     subtitle: 'put your life in the hands of a computer',
-    options: ['one', 'two']
+    options: []
 };
 
 function showOptions() {
@@ -22,33 +22,89 @@ function showOptions() {
     }
 }
 
-var template = React.createElement(
-    'div',
-    null,
-    React.createElement(
-        'h1',
-        null,
-        app.title
-    ),
-    app.subtitle && React.createElement(
-        'p',
-        null,
-        app.subtitle
-    ),
-    showOptions(),
-    React.createElement(
-        'ol',
+var onFormSubmit = function onFormSubmit(e) {
+    e.preventDefault();
+    var option = e.target.elements.option.value;
+    if (option) {
+        app.options.push(option);
+        e.target.elements.option.value = ' ';
+        renderFormData();
+    }
+};
+
+var removeOne = function removeOne(e) {
+    e.preventDefault();
+    if (app.options.length > 0) {
+        app.options.pop();
+        renderFormData();
+    }
+};
+
+var removeAll = function removeAll(e) {
+    e.preventDefault();
+    if (app.options.length > 0) {
+        app.options = [];
+        renderFormData();
+    }
+};
+
+var appRoot = document.getElementById('app');
+var renderFormData = function renderFormData() {
+    var template = React.createElement(
+        'div',
         null,
         React.createElement(
-            'li',
+            'h1',
             null,
-            'Item one'
+            app.title
+        ),
+        app.subtitle && React.createElement(
+            'p',
+            null,
+            app.subtitle
+        ),
+        showOptions(),
+        React.createElement(
+            'p',
+            null,
+            app.options.length
         ),
         React.createElement(
-            'li',
+            'ol',
             null,
-            'Item two'
+            React.createElement(
+                'li',
+                null,
+                'Item one'
+            ),
+            React.createElement(
+                'li',
+                null,
+                'Item two'
+            )
+        ),
+        React.createElement(
+            'form',
+            { onSubmit: onFormSubmit },
+            React.createElement('input', { type: 'text', name: 'option' }),
+            React.createElement(
+                'button',
+                null,
+                'Add option'
+            ),
+            React.createElement(
+                'button',
+                { onClick: removeOne },
+                'Remove'
+            ),
+            React.createElement(
+                'button',
+                { onClick: removeAll },
+                'Remove All'
+            )
         )
-    )
-);
-var appRoot = document.getElementById('app');
+    );
+    ReactDOM.render(template, appRoot);
+};
+
+renderFormData();
